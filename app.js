@@ -3,6 +3,7 @@ class App extends React.Component{
         super(props) 
         this.state = {prenom: '', prenom: '', nom: '', email: '', tel: '', listeUser: [], isEditing: false, editingUserId: ''}
     }
+
     handleChange = (name) => (e) => {
         this.setState({[name]: e.target.value})
     }
@@ -15,7 +16,6 @@ class App extends React.Component{
                 newUser = this.state.listeUser.map(user => 
                     user.id === this.state.editingUserId ? 
                         {
-                            ...user, 
                             prenom: this.state.prenom, 
                             nom: this.state.nom, 
                             email: this.state.email, 
