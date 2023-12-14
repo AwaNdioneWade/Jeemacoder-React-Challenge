@@ -1,7 +1,15 @@
 class App extends React.Component{
     constructor(props){
         super(props) 
-        this.state = {prenom: '', prenom: '', nom: '', email: '', tel: '', listeUser: [], isEditing: false, editingUserId: ''}
+        this.state = {
+                        prenom: '', 
+                        nom: '', 
+                        email: '', 
+                        tel: '',
+                        listeUser: JSON.parse(localStorage.getItem('listeUser')) || [], 
+                        isEditing: false, 
+                        editingUserId: ''
+                    }
     }
 
     handleChange = (name) => (e) => {
@@ -34,8 +42,9 @@ class App extends React.Component{
                 };
                 newUser = [...this.state.listeUser, newUser];
             }
-            this.setState({listeUser: newUser, prenom: '', nom: '', email: '', tel: '', isEditing: false});
-        }else{
+            this.setState({listeUser: newUser, prenom: '', nom: '', email: '', tel: '', isEditing: false}, () => {
+                localStorage.setItem('listeUser', JSON.stringify(this.state.listeUser));
+            })}else{
             alert("Entrez d'abord tous les champs")
         }
     }
@@ -54,13 +63,16 @@ class App extends React.Component{
 
     deleteUser = (userId) => {
         const newListeUser = this.state.listeUser.filter(user => user.id !== userId)
-        this.setState({listeUser: newListeUser})
+        this.setState({listeUser: newListeUser}, () => {
+            localStorage.setItem('listeUser', JSON.stringify(this.state.listeUser));
+        });
     }
 
     render(){
         return(
             <div>
                 <Form  addUser={this.addUser} listeUser={this.state.listeUser} prenom={this.state.prenom} nom={this.state.nom} email={this.state.email} tel={this.state.tel} isEditing={this.state.isEditing} handleChange={this.handleChange} />
+
                 <Table listeUser={this.state.listeUser}  editUser={this.editUser}  deleteUser={this.deleteUser}/>
             </div>
         )
@@ -99,7 +111,6 @@ class Input extends React.Component {
       )
     }
 }
-
 class Table extends React.Component{
     render(){
         return(
@@ -123,7 +134,6 @@ class Table extends React.Component{
         )
     }
 }
-
 class Tbody extends React.Component{
     render(){
         return(
